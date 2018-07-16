@@ -73,13 +73,17 @@ swiftmailer:
 # FOS User
 fos_user:
     db_driver: orm # other valid values are 'mongodb', 'couchdb' and 'propel'
-    firewall_name: api
+    firewall_name: main
     user_class: AppBundle\Entity\User
     from_email:
         address:        support@mywebsite.com
         sender_name:    mr_mailer
     service:
         mailer: user.mailer.rest
+    registration:
+        form:
+            name: app_user_registration
+
 
 
 # Nelmio CORS
@@ -87,7 +91,7 @@ nelmio_cors:
     defaults:
         allow_origin:  ["%cors_allow_origin%"]
         allow_methods: ["POST", "PUT", "GET", "DELETE", "OPTIONS"]
-        allow_headers: ["Content-Type", "Authorization"]
+        allow_headers: ["Content-Type", "Authorization", "enctype"]
         max_age:       3600
     paths:
         '^/': ~
@@ -100,7 +104,7 @@ nelmio_api_doc: ~
 # FOS REST Bundle
 fos_rest:
     body_listener: true
-    param_fetcher_listener: force
+    param_fetcher_listener: true
     view:
         view_response_listener: 'force'
         formats:
@@ -111,6 +115,7 @@ fos_rest:
             json: ['application/json', 'application/x-json']
             jpg: ['image/jpeg']
             png: ['image/png']
+            pdf: ['application/pdf']
     routing_loader:
         default_format:  json
         include_format:  false

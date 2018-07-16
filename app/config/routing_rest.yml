@@ -12,7 +12,27 @@ profile:
     type: rest
     resource: AppBundle\Controller\RestProfileController
 
+user:
+    type: rest
+    resource: AppBundle\Controller\FosUserRestController
+
 
 registration:
     type: rest
     resource: AppBundle\Controller\RestRegistrationController
+
+project:
+    type: rest
+    resource: AppBundle\Controller\ProjectController
+
+skill:
+    type: rest
+    resource: AppBundle\Controller\SkillController
+
+cours:
+    type: rest
+    resource: AppBundle\Controller\CoursController
+
+quizs:
+    type: rest
+    resource: AppBundle\Controller\QuizsController

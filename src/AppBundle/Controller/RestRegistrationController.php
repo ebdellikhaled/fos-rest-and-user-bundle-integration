@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Form\Type\RegistrationFormType;
 use FOS\RestBundle\Controller\Annotations;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Routing\ClassResourceInterface;
@@ -14,6 +15,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use AppBundle\Entity\User;
 
 /**
  * @RouteResource("registration", pluralize=false)
@@ -26,7 +28,7 @@ class RestRegistrationController extends FOSRestController implements ClassResou
     public function registerAction(Request $request)
     {
         /** @var $formFactory \FOS\UserBundle\Form\Factory\FactoryInterface */
-        $formFactory = $this->get('fos_user.registration.form.factory');
+        $formFactory = $this->get('user.form.type.registration');
         /** @var $userManager \FOS\UserBundle\Model\UserManagerInterface */
         $userManager = $this->get('fos_user.user_manager');
         /** @var $dispatcher \Symfony\Component\EventDispatcher\EventDispatcherInterface */
@@ -34,7 +36,7 @@ class RestRegistrationController extends FOSRestController implements ClassResou
 
         $user = $userManager->createUser();
         $user->setEnabled(true);
-        
+
         $event = new GetResponseUserEvent($user, $request);
         $dispatcher->dispatch(FOSUserEvents::REGISTRATION_INITIALIZE, $event);
 
@@ -42,8 +44,8 @@ class RestRegistrationController extends FOSRestController implements ClassResou
             return $event->getResponse();
         }
 
-        $form = $formFactory->createForm([
-            'csrf_protection'    => false
+        $form = $this->createForm(RegistrationFormType::class, null, [
+            'csrf_protection' => false,
         ]);
         $form->setData($user);
         $form->submit($request->request->all());
@@ -60,6 +62,7 @@ class RestRegistrationController extends FOSRestController implements ClassResou
             return $form;
         }
 
+
         $event = new FormEvent($form, $request);
         $dispatcher->dispatch(FOSUserEvents::REGISTRATION_SUCCESS, $event);
 
@@ -67,6 +70,8 @@ class RestRegistrationController extends FOSRestController implements ClassResou
             return $event->getResponse();
         }
 
+        $role = $form->get('role')->getData();
+        $user->addRole($role);
         $userManager->updateUser($user);
 
         $response = new JsonResponse(

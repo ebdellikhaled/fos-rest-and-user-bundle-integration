@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Form\Type\RegistrationFormType;
 use FOS\RestBundle\View\View;
 use FOS\RestBundle\Controller\Annotations;
 use FOS\RestBundle\Controller\FOSRestController;
@@ -26,24 +27,33 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class RestProfileController extends FOSRestController implements ClassResourceInterface
 {
     /**
-     * @Annotations\Get("/profile/{user}")
+     * @Annotations\Get("/profile")
      *
      * @Annotations\View(serializerGroups={
      *   "users_all"
      * })
      *
-     * @ParamConverter("user", class="AppBundle:User")
+     * Note: Could be refactored to make use of the User Resolver in Symfony 3.2 onwards
+     * more at : http://symfony.com/blog/new-in-symfony-3-2-user-value-resolver-for-controllers
+     */
+    public function getAction()
+    {
+        return $this->getUser();
+    }
+
+    /**
+     * @Annotations\Get("/profile/skills")
+     *
+     * @Annotations\View(serializerGroups={
+     *   "users_all"
+     * })
      *
      * Note: Could be refactored to make use of the User Resolver in Symfony 3.2 onwards
      * more at : http://symfony.com/blog/new-in-symfony-3-2-user-value-resolver-for-controllers
      */
-    public function getAction(UserInterface $user)
+    public function getSkillsAction()
     {
-        if ($user !== $this->getUser()) {
-            throw new AccessDeniedHttpException();
-        }
-
-        return $user;
+        return $this->getUser()->getSkills();
     }
 
     /**
@@ -81,7 +91,7 @@ class RestProfileController extends FOSRestController implements ClassResourceIn
      */
     private function updateProfile(Request $request, $clearMissing = true, UserInterface $user)
     {
-        $user = $this->getAction($user);
+        $user = $this->getUser();
 
         /** @var $dispatcher \Symfony\Component\EventDispatcher\EventDispatcherInterface */
         $dispatcher = $this->get('event_dispatcher');
@@ -96,7 +106,9 @@ class RestProfileController extends FOSRestController implements ClassResourceIn
         /** @var $formFactory \FOS\UserBundle\Form\Factory\FactoryInterface */
         $formFactory = $this->get('fos_user.profile.form.factory');
 
-        $form = $formFactory->createForm(['csrf_protection' => false]);
+        $form = $this->createForm(RegistrationFormType::class, null, [
+            'csrf_protection' => false,
+        ]);
         $form->setData($user);
 
         $form->submit($request->request->all(), $clearMissing);

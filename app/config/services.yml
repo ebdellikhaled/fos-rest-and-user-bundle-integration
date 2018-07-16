@@ -1,7 +1,9 @@
 # Learn more about services, parameters and containers at
 # http://symfony.com/doc/current/book/service_container.html
 parameters:
-#    parameter_name: value
+    brochures_directory: '%kernel.root_dir%/../web/uploads/brochures'
+    videos_directory: '%kernel.root_dir%/../web/uploads/videos'
+    doc_tasks_directory: '%kernel.root_dir%/../web/uploads/tasks_doc'
 
 services:
 
@@ -16,3 +18,27 @@ services:
         class: AppBundle\Mailer\RestMailer
         public: false
         parent: fos_user.mailer.twig_swift
+
+    user.form.type.registration:
+       class: AppBundle\Form\Type\RegistrationFormType
+       arguments: [%fos_user.model.user.class%]
+       tags:
+           - { name: form.type, alias: app_user_registration }
+
+    app.brochure_uploader:
+        class: AppBundle\FileUploader
+        arguments: ['%brochures_directory%']
+
+    app.video_uploader:
+        class: AppBundle\FileUploader
+        arguments: ['%videos_directory%']
+    app.doc_tasks_uploader:
+        class: AppBundle\FileUploader
+        arguments: ['%doc_tasks_directory%']
+
+    app.doctrine_brochure_listener:
+        class: AppBundle\EventListener\BrochureUploadListener
+        arguments: ['@app.brochure_uploader']
+        tags:
+            - { name: doctrine.event_listener, event: prePersist }
+            - { name: doctrine.event_listener, event: preUpdate }

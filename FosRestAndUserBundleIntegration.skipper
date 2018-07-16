@@ -1,0 +1,414 @@
+<?xml version="1.0"?>
+<skipper version="3.2.12.1400" mvc="Symfony" orm="Doctrine2" name="Fos-rest-and-user-bundle-integration" uuid="5fc58da5-abaa-44c8-9098-f4bd7d130098">
+  <module name="\src/AppBundle/Entity" local-name="src/AppBundle/Entity" namespace="\AppBundle\Entity" local-namespace="\AppBundle\Entity" export-format="Doctrine2Php" export-path="src/AppBundle/Entity" uuid="5968eaec-4f9f-46cd-963e-be096952df54">
+    <entity name="\AppBundle\Entity\Cours" local-name="Cours" namespace="\AppBundle\Entity" uuid="9957b01c-b1cb-4e1a-8701-7f99dd099fff">
+      <field name="id" type="integer" required="true" primary="true" uuid="bdf0ff18-2556-4708-99b0-044a8525a9f9">
+        <orm-attributes>
+          <attribute name="column">id</attribute>
+          <attribute name="generator">
+            <attribute name="strategy">AUTO</attribute>
+          </attribute>
+        </orm-attributes>
+      </field>
+      <field name="title" type="string" size="255" uuid="35b58d6f-a9f3-4d64-829a-f0962bb3ac1c">
+        <orm-attributes>
+          <attribute name="column">title</attribute>
+        </orm-attributes>
+      </field>
+      <field name="description" type="text" size="1000" uuid="ae0297e2-fb61-4d75-b7ce-228b985ba076">
+        <orm-attributes>
+          <attribute name="column">description</attribute>
+        </orm-attributes>
+      </field>
+      <field name="created" type="datetime" uuid="b5534b85-313f-4725-83d4-e31bfdac18bd"/>
+      <field name="updated" type="datetime" uuid="8d54d884-8778-4580-a6e4-b0e740f99d77"/>
+      <field name="brochure" type="string" uuid="e724f594-e3bc-491c-8990-dd2621cd8093"/>
+      <field name="user_id" uuid="8a353cb3-9c07-4753-8d1b-e02567d94881"/>
+      <orm-attributes>
+        <attribute name="repository-class">AppBundle\Repository\ProjectRepository</attribute>
+        <attribute name="table">cours</attribute>
+        <attribute name="export-file-name">Cours.php</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="\AppBundle\Entity\Cours" to="\AppBundle\Entity\User" owner-alias="" inverse-alias="user" many-owner="true" many-inverse="false" uuid="dc81cab2-3967-4ebf-a40f-e92e27273018">
+      <association-field from="user_id" to="id"/>
+      <orm-attributes>
+        <attribute name="on-delete">CASCADE</attribute>
+        <attribute name="side-owning"/>
+        <attribute name="side-inverse"/>
+      </orm-attributes>
+    </association>
+    <entity name="\AppBundle\Entity\CoursQuiz" local-name="CoursQuiz" namespace="\AppBundle\Entity" uuid="8a85f08c-4b8b-4d45-8ba5-2053b0b3533c">
+      <field name="userId" type="integer" required="true" primary="true" uuid="9a4b34eb-4673-47b9-8373-df0d10bd2ada">
+        <orm-attributes>
+          <attribute name="column">user_id</attribute>
+        </orm-attributes>
+      </field>
+      <field name="cours_id" required="true" primary="true" uuid="029c9e00-6637-4b79-a58b-dc181dad0771"/>
+      <field name="ok" type="boolean" uuid="76b56766-8b01-4a58-a6af-4521cefa8e4c">
+        <orm-attributes>
+          <attribute name="column">ok</attribute>
+        </orm-attributes>
+      </field>
+      <field name="choiceSelected" type="string" uuid="533c3d92-06d9-48cd-aae1-55512e6c5867">
+        <orm-attributes>
+          <attribute name="column">choice_selected</attribute>
+        </orm-attributes>
+      </field>
+      <orm-attributes>
+        <attribute name="table">cours_quiz</attribute>
+        <attribute name="export-file-name">CoursQuiz.php</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="\AppBundle\Entity\CoursQuiz" to="\AppBundle\Entity\Cours" owner-alias="" inverse-alias="cours" many-owner="true" many-inverse="false" parent-required="true" uuid="2496d819-b3b2-4bbf-96a2-ce3760545451">
+      <association-field from="cours_id" to="id"/>
+      <orm-attributes>
+        <attribute name="on-delete">CASCADE</attribute>
+        <attribute name="side-owning"/>
+        <attribute name="side-inverse"/>
+      </orm-attributes>
+    </association>
+    <entity name="\AppBundle\Entity\CoursSkills" local-name="CoursSkills" namespace="\AppBundle\Entity" uuid="c44ac7c9-ef5b-4aa6-99ce-df279cd21214">
+      <field name="cours_id" required="true" primary="true" uuid="24d2531e-e329-4a9d-9b96-936a17de50a0"/>
+      <field name="skill_id" required="true" primary="true" uuid="82ff84c8-5e07-4f82-8b35-fd161cff7efc"/>
+      <field name="score" type="integer" uuid="29cfe9fb-dc25-4da1-b9ec-8e22286160ab">
+        <orm-attributes>
+          <attribute name="column">score</attribute>
+        </orm-attributes>
+      </field>
+      <orm-attributes>
+        <attribute name="table">cours_skills</attribute>
+        <attribute name="export-file-name">CoursSkills.php</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="\AppBundle\Entity\CoursSkills" to="\AppBundle\Entity\Cours" owner-alias="skills" inverse-alias="cours" many-owner="true" many-inverse="false" parent-required="true" uuid="b05a9dd8-112f-41d2-affe-bb87edd2f048">
+      <association-field from="cours_id" to="id"/>
+      <orm-attributes>
+        <attribute name="on-delete">CASCADE</attribute>
+        <attribute name="side-owning"/>
+        <attribute name="side-inverse">
+          <attribute name="cascade">
+            <attribute name="cascade-persist">true</attribute>
+          </attribute>
+        </attribute>
+      </orm-attributes>
+    </association>
+    <association from="\AppBundle\Entity\CoursSkills" to="\AppBundle\Entity\Skill" owner-alias="cours" inverse-alias="skills" many-owner="true" many-inverse="false" parent-required="true" uuid="67feb47c-55c3-4da6-9c1a-036a8e736565">
+      <association-field from="skill_id" to="id"/>
+      <orm-attributes>
+        <attribute name="on-delete">CASCADE</attribute>
+        <attribute name="side-owning"/>
+        <attribute name="side-inverse"/>
+      </orm-attributes>
+    </association>
+    <entity name="\AppBundle\Entity\Project" local-name="Project" namespace="\AppBundle\Entity" uuid="f499f86b-aa3d-4ec4-887e-9c3a811e4687">
+      <field name="id" type="integer" required="true" primary="true" uuid="ae2ac824-5f9d-4f34-a779-3ae3bbc8c92d">
+        <orm-attributes>
+          <attribute name="column">id</attribute>
+          <attribute name="generator">
+            <attribute name="strategy">AUTO</attribute>
+          </attribute>
+        </orm-attributes>
+      </field>
+      <field name="title" type="string" size="255" uuid="8b07e76f-6cc4-444b-a07e-b747ad98d5df">
+        <orm-attributes>
+          <attribute name="column">title</attribute>
+        </orm-attributes>
+      </field>
+      <field name="description" type="text" size="1000" uuid="6e8698b1-4c06-46ab-b735-193a580ff6e6">
+        <orm-attributes>
+          <attribute name="column">description</attribute>
+        </orm-attributes>
+      </field>
+      <field name="created" type="datetime" uuid="38daeda4-f911-4159-ab8e-67437c4b7c98"/>
+      <field name="updated" type="datetime" uuid="ab623f52-6c77-4d07-858e-a39daeb30272"/>
+      <field name="brochure" type="string" uuid="92d601ee-f5cb-496d-9eb5-9021d79e7c92"/>
+      <field name="user_id" uuid="d98ea75c-c5b2-45e6-bc20-3c849d1eed2c"/>
+      <orm-attributes>
+        <attribute name="repository-class">AppBundle\Repository\ProjectRepository</attribute>
+        <attribute name="table">project</attribute>
+        <attribute name="export-file-name">Project.php</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="\AppBundle\Entity\Project" to="\AppBundle\Entity\User" owner-alias="projects" inverse-alias="user" many-owner="true" many-inverse="false" uuid="dc76282b-8522-4eaa-8ff5-c67caa846a77">
+      <association-field from="user_id" to="id"/>
+      <orm-attributes>
+        <attribute name="on-delete">CASCADE</attribute>
+        <attribute name="side-owning"/>
+        <attribute name="side-inverse"/>
+      </orm-attributes>
+    </association>
+    <entity name="\AppBundle\Entity\ProjectSkills" local-name="ProjectSkills" namespace="\AppBundle\Entity" uuid="2bf2c577-499d-4dd8-954a-4c9ce15f40ac">
+      <field name="project_id" required="true" primary="true" uuid="57d8d20b-699b-4928-8da8-463d1c9fe773"/>
+      <field name="skill_id" required="true" primary="true" uuid="8cc48e38-bb6a-4ff0-9fca-fa26bdde410d"/>
+      <field name="score" type="integer" uuid="9f851fc6-1602-4128-8581-7d0a2b945f2f">
+        <orm-attributes>
+          <attribute name="column">score</attribute>
+        </orm-attributes>
+      </field>
+      <orm-attributes>
+        <attribute name="table">project_skills</attribute>
+        <attribute name="export-file-name">ProjectSkills.php</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="\AppBundle\Entity\ProjectSkills" to="\AppBundle\Entity\Project" owner-alias="skills" inverse-alias="projects" many-owner="true" many-inverse="false" parent-required="true" uuid="3b8a13d7-3670-45fe-85b0-8f5fa7960f70">
+      <association-field from="project_id" to="id"/>
+      <orm-attributes>
+        <attribute name="on-delete">CASCADE</attribute>
+        <attribute name="side-owning"/>
+        <attribute name="side-inverse">
+          <attribute name="cascade">
+            <attribute name="cascade-persist">true</attribute>
+          </attribute>
+        </attribute>
+      </orm-attributes>
+    </association>
+    <association from="\AppBundle\Entity\ProjectSkills" to="\AppBundle\Entity\Skill" owner-alias="projects" inverse-alias="skills" many-owner="true" many-inverse="false" parent-required="true" uuid="40b64cf9-74ee-4e13-9217-fb8df2e04cee">
+      <association-field from="skill_id" to="id"/>
+      <orm-attributes>
+        <attribute name="on-delete">CASCADE</attribute>
+        <attribute name="side-owning"/>
+        <attribute name="side-inverse"/>
+      </orm-attributes>
+    </association>
+    <entity name="\AppBundle\Entity\Quiz" local-name="Quiz" namespace="\AppBundle\Entity" uuid="00b085d1-d4a3-49ac-9a7a-4261fc9f5f88">
+      <field name="id" type="integer" required="true" primary="true" uuid="604bb864-a668-43a1-91e5-0de48b7da899">
+        <orm-attributes>
+          <attribute name="column">id</attribute>
+          <attribute name="generator">
+            <attribute name="strategy">AUTO</attribute>
+          </attribute>
+        </orm-attributes>
+      </field>
+      <field name="question" type="string" size="255" uuid="79bd8f9c-42b9-4200-aaf8-6ea78af17cd5">
+        <orm-attributes>
+          <attribute name="column">question</attribute>
+        </orm-attributes>
+      </field>
+      <field name="response" type="text" size="1000" uuid="8e9e5b03-4827-4a88-9c6e-cc8f0facbde6">
+        <orm-attributes>
+          <attribute name="column">response</attribute>
+        </orm-attributes>
+      </field>
+      <field name="choices" type="array" uuid="515eaded-51a7-4470-b806-ba14ab3ba10d">
+        <orm-attributes>
+          <attribute name="column">choices</attribute>
+        </orm-attributes>
+      </field>
+      <field name="created" type="datetime" uuid="fd4c1b93-afed-4324-a36f-555e18b5633b"/>
+      <field name="updated" type="datetime" uuid="2dd5b461-638e-4ac0-97da-ec1197d1ea5e"/>
+      <field name="cours_id" uuid="db481922-3601-4bc7-878b-7e375762ff88"/>
+      <orm-attributes>
+        <attribute name="repository-class">AppBundle\Repository\ProjectRepository</attribute>
+        <attribute name="table">quiz</attribute>
+        <attribute name="export-file-name">Quiz.php</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="\AppBundle\Entity\Quiz" to="\AppBundle\Entity\Cours" owner-alias="" inverse-alias="cours" many-owner="true" many-inverse="false" uuid="f8fd6f20-4f41-4cef-8239-8a5bc66f09c3">
+      <association-field from="cours_id" to="id"/>
+      <orm-attributes>
+        <attribute name="side-owning"/>
+        <attribute name="side-inverse"/>
+      </orm-attributes>
+    </association>
+    <entity name="\AppBundle\Entity\Skill" local-name="Skill" namespace="\AppBundle\Entity" uuid="18fcc29e-e2f6-43e0-8d25-1132fd803243">
+      <field name="id" type="integer" required="true" primary="true" uuid="f2b81bb8-9419-4b97-95d6-f66f9abd9ff9">
+        <orm-attributes>
+          <attribute name="column">id</attribute>
+          <attribute name="generator">
+            <attribute name="strategy">AUTO</attribute>
+          </attribute>
+        </orm-attributes>
+      </field>
+      <field name="title" type="string" size="255" uuid="c253e12a-1ea8-4b76-b5c9-afabaab8e06f">
+        <orm-attributes>
+          <attribute name="column">title</attribute>
+        </orm-attributes>
+      </field>
+      <field name="created" type="datetime" uuid="069171ee-345d-4bfc-aed6-2a02f0435480"/>
+      <field name="updated" type="datetime" uuid="df8dafae-3e2f-4ad5-9cf0-1d952c197f4f"/>
+      <field name="state" type="boolean" default="0" uuid="3b07a62a-de52-4d70-9579-75f54d98512d">
+        <orm-attributes>
+          <attribute name="options"/>
+        </orm-attributes>
+      </field>
+      <field name="user_id" uuid="b7c5886f-61cb-4521-9579-46d3c0f1f209"/>
+      <orm-attributes>
+        <attribute name="table">skill</attribute>
+        <attribute name="export-file-name">Skill.php</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="\AppBundle\Entity\Skill" to="\AppBundle\Entity\User" owner-alias="" inverse-alias="user" many-owner="true" many-inverse="false" uuid="2e48893f-622a-48db-9a21-43d89b31e961">
+      <association-field from="user_id" to="id"/>
+      <orm-attributes>
+        <attribute name="on-delete">CASCADE</attribute>
+        <attribute name="side-owning"/>
+        <attribute name="side-inverse"/>
+      </orm-attributes>
+    </association>
+    <entity name="\AppBundle\Entity\User" local-name="User" namespace="\AppBundle\Entity" uuid="b8315480-e378-421a-9878-37a5f93460ee">
+      <field name="id" type="integer" required="true" primary="true" uuid="c170a026-0514-4bea-af77-c5e117f7db95">
+        <orm-attributes>
+          <attribute name="generator">
+            <attribute name="strategy">AUTO</attribute>
+          </attribute>
+        </orm-attributes>
+      </field>
+      <field name="firstname" type="string" uuid="95d999b0-d708-43cf-b94f-f4c1f0297b52">
+        <orm-attributes>
+          <attribute name="column">firstname</attribute>
+        </orm-attributes>
+      </field>
+      <field name="lastname" type="string" uuid="2a1506b0-c2d5-4839-a090-889bb3bc74b6">
+        <orm-attributes>
+          <attribute name="column">lastname</attribute>
+        </orm-attributes>
+      </field>
+      <field name="phone" type="string" uuid="c80a4d4b-f96e-42a4-83df-5855dfe6dbe1">
+        <orm-attributes>
+          <attribute name="column">phone</attribute>
+        </orm-attributes>
+      </field>
+      <field name="role" type="string" uuid="dbeb9a32-afcf-4f55-bb41-d84444286014">
+        <orm-attributes>
+          <attribute name="column">role</attribute>
+        </orm-attributes>
+      </field>
+      <field name="department" type="string" uuid="4af51d7e-ec55-4bbf-81fd-02e84776ed06">
+        <orm-attributes>
+          <attribute name="column">department</attribute>
+        </orm-attributes>
+      </field>
+      <orm-attributes>
+        <attribute name="table">fos_user</attribute>
+        <attribute name="export-file-name">User.php</attribute>
+      </orm-attributes>
+    </entity>
+    <entity name="\AppBundle\Entity\UserCours" local-name="UserCours" namespace="\AppBundle\Entity" uuid="d6a28681-e0e2-4c01-9c32-40cbe3f433aa">
+      <field name="user_id" required="true" primary="true" uuid="b5c20177-11f8-4f45-be33-bbbbb73200fb"/>
+      <field name="cours_id" required="true" primary="true" uuid="0bfcf579-9da1-421a-9c2e-50e15a1bbb1f"/>
+      <field name="enabled" type="boolean" uuid="2bf533c7-f7c5-48bc-80af-f9b5ad18a111">
+        <orm-attributes>
+          <attribute name="column">enabled</attribute>
+        </orm-attributes>
+      </field>
+      <field name="tuteur" type="boolean" uuid="298cd753-4aac-4817-8f5c-d8bbf1acc6f2">
+        <orm-attributes>
+          <attribute name="column">tuteur</attribute>
+        </orm-attributes>
+      </field>
+      <orm-attributes>
+        <attribute name="table">user_cours</attribute>
+        <attribute name="export-file-name">UserCours.php</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="\AppBundle\Entity\UserCours" to="\AppBundle\Entity\User" owner-alias="cours" inverse-alias="user" many-owner="true" many-inverse="false" parent-required="true" uuid="b7179067-7883-4d49-8e3e-15a5f83666df">
+      <association-field from="user_id" to="id"/>
+      <orm-attributes>
+        <attribute name="side-owning"/>
+        <attribute name="side-inverse"/>
+      </orm-attributes>
+    </association>
+    <association from="\AppBundle\Entity\UserCours" to="\AppBundle\Entity\Cours" owner-alias="participants" inverse-alias="cours" many-owner="true" many-inverse="false" parent-required="true" uuid="ee6d65ac-e0fe-4d2d-b333-89635f68c58c">
+      <association-field from="cours_id" to="id"/>
+      <orm-attributes>
+        <attribute name="side-owning"/>
+        <attribute name="side-inverse">
+          <attribute name="cascade">
+            <attribute name="cascade-persist">true</attribute>
+          </attribute>
+        </attribute>
+      </orm-attributes>
+    </association>
+    <entity name="\AppBundle\Entity\UserSkills" local-name="UserSkills" namespace="\AppBundle\Entity" uuid="4e724b15-4445-4a51-8bd4-bfc1020d0c77">
+      <field name="user_id" required="true" primary="true" uuid="5fbbae9a-ef24-4032-afea-b7393815f7db"/>
+      <field name="skill_id" required="true" primary="true" uuid="f17acfb6-795f-4bcd-ba53-dfaf6ac3028c"/>
+      <field name="score" type="integer" uuid="d47eaaad-78a2-4586-8804-634cce77741d">
+        <orm-attributes>
+          <attribute name="column">score</attribute>
+        </orm-attributes>
+      </field>
+      <orm-attributes>
+        <attribute name="table">user_skills</attribute>
+        <attribute name="export-file-name">UserSkills.php</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="\AppBundle\Entity\UserSkills" to="\AppBundle\Entity\User" owner-alias="skills" inverse-alias="users" many-owner="true" many-inverse="false" parent-required="true" uuid="fc0242ca-9f4c-4df6-b7f5-f2bc620109c6">
+      <association-field from="user_id" to="id"/>
+      <orm-attributes>
+        <attribute name="on-delete">CASCADE</attribute>
+        <attribute name="side-owning"/>
+        <attribute name="side-inverse"/>
+      </orm-attributes>
+    </association>
+    <association from="\AppBundle\Entity\UserSkills" to="\AppBundle\Entity\Skill" owner-alias="users" inverse-alias="skills" many-owner="true" many-inverse="false" parent-required="true" uuid="d0c422f1-3034-4ec4-bd6e-93390f2b9eb9">
+      <association-field from="skill_id" to="id"/>
+      <orm-attributes>
+        <attribute name="on-delete">CASCADE</attribute>
+        <attribute name="side-owning"/>
+        <attribute name="side-inverse"/>
+      </orm-attributes>
+    </association>
+    <entity name="\AppBundle\Entity\UserSubscriptions" local-name="UserSubscriptions" namespace="\AppBundle\Entity" uuid="78c650b2-ac21-4907-8615-0b177382774e">
+      <field name="user_id" required="true" primary="true" uuid="50dc47df-caff-4bed-a54b-26553d3055b0"/>
+      <field name="project_id" required="true" primary="true" uuid="04714d82-5335-4e14-94e4-2edd2dd2d058"/>
+      <field name="enabled" type="boolean" uuid="6d447dcc-0432-412d-adbe-fadb40bea39a">
+        <orm-attributes>
+          <attribute name="column">enabled</attribute>
+        </orm-attributes>
+      </field>
+      <orm-attributes>
+        <attribute name="table">user_subscriptions</attribute>
+        <attribute name="export-file-name">UserSubscriptions.php</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="\AppBundle\Entity\UserSubscriptions" to="\AppBundle\Entity\User" owner-alias="subscriptions" inverse-alias="user" many-owner="true" many-inverse="false" parent-required="true" uuid="0c0defdc-9234-4334-9f10-d1fcc56a5594">
+      <association-field from="user_id" to="id"/>
+      <orm-attributes>
+        <attribute name="side-owning"/>
+        <attribute name="side-inverse"/>
+      </orm-attributes>
+    </association>
+    <association from="\AppBundle\Entity\UserSubscriptions" to="\AppBundle\Entity\Project" owner-alias="contributors" inverse-alias="project" many-owner="true" many-inverse="false" parent-required="true" uuid="026e35e5-fe26-4d85-956a-10eb55b7dade">
+      <association-field from="project_id" to="id"/>
+      <orm-attributes>
+        <attribute name="side-owning"/>
+        <attribute name="side-inverse">
+          <attribute name="cascade">
+            <attribute name="cascade-persist">true</attribute>
+          </attribute>
+        </attribute>
+      </orm-attributes>
+    </association>
+  </module>
+  <visual-data>
+    <association uuid="026e35e5-fe26-4d85-956a-10eb55b7dade" color="#8A54A2"/>
+    <association uuid="0c0defdc-9234-4334-9f10-d1fcc56a5594" color="#C774AF"/>
+    <association uuid="2496d819-b3b2-4bbf-96a2-ce3760545451" color="#F4931F"/>
+    <association uuid="2e48893f-622a-48db-9a21-43d89b31e961" color="#0A783D"/>
+    <association uuid="3b8a13d7-3670-45fe-85b0-8f5fa7960f70" color="#2E63AF"/>
+    <association uuid="40b64cf9-74ee-4e13-9217-fb8df2e04cee" color="#00B4D0"/>
+    <association uuid="67feb47c-55c3-4da6-9c1a-036a8e736565" color="#C774AF"/>
+    <association uuid="b05a9dd8-112f-41d2-affe-bb87edd2f048" color="#B31F24"/>
+    <association uuid="b7179067-7883-4d49-8e3e-15a5f83666df" color="#61D351"/>
+    <association uuid="d0c422f1-3034-4ec4-bd6e-93390f2b9eb9" color="#B31F24"/>
+    <association uuid="dc76282b-8522-4eaa-8ff5-c67caa846a77" color="#8A54A2"/>
+    <association uuid="dc81cab2-3967-4ebf-a40f-e92e27273018" color="#CDC32B"/>
+    <association uuid="ee6d65ac-e0fe-4d2d-b333-89635f68c58c" color="#CDC32B"/>
+    <association uuid="f8fd6f20-4f41-4cef-8239-8a5bc66f09c3" color="#A8A8A8"/>
+    <association uuid="fc0242ca-9f4c-4df6-b7f5-f2bc620109c6" color="#F4931F"/>
+    <entity uuid="00b085d1-d4a3-49ac-9a7a-4261fc9f5f88" bg-color="#FFFFFF" hdr-color="#D2D2D2" position-x="335" position-y="195" size-x="0" size-x2="110" size-y="0" size-y2="115"/>
+    <entity uuid="18fcc29e-e2f6-43e0-8d25-1132fd803243" bg-color="#FFFFFF" hdr-color="#D2D2D2" position-x="28" position-y="350" size-x="0" size-x2="99" size-y="0" size-y2="101"/>
+    <entity uuid="2bf2c577-499d-4dd8-954a-4c9ce15f40ac" bg-color="#FFFFFF" hdr-color="#D2D2D2" position-x="193" position-y="195" size-x="0" size-x2="82" size-y="0" size-y2="59"/>
+    <entity uuid="4e724b15-4445-4a51-8bd4-bfc1020d0c77" bg-color="#FFFFFF" hdr-color="#D2D2D2" position-x="37" position-y="505" size-x="0" size-x2="82" size-y="0" size-y2="59"/>
+    <entity uuid="78c650b2-ac21-4907-8615-0b177382774e" bg-color="#FFFFFF" hdr-color="#D2D2D2" position-x="186" position-y="505" size-x="0" size-x2="96" size-y="0" size-y2="59"/>
+    <entity uuid="8a85f08c-4b8b-4d45-8ba5-2053b0b3533c" bg-color="#FFFFFF" hdr-color="#D2D2D2" position-x="176" position-y="40" size-x="0" size-x2="115" size-y="0" size-y2="73"/>
+    <entity uuid="9957b01c-b1cb-4e1a-8701-7f99dd099fff" bg-color="#FFFFFF" hdr-color="#D2D2D2" position-x="20" position-y="40" size-x="0" size-x2="116" size-y="0" size-y2="115"/>
+    <entity uuid="b8315480-e378-421a-9878-37a5f93460ee" bg-color="#FFFFFF" hdr-color="#D2D2D2" position-x="184" position-y="350" size-x="0" size-x2="100" size-y="0" size-y2="101"/>
+    <entity uuid="c44ac7c9-ef5b-4aa6-99ce-df279cd21214" bg-color="#FFFFFF" hdr-color="#D2D2D2" position-x="349" position-y="40" size-x="0" size-x2="82" size-y="0" size-y2="59"/>
+    <entity uuid="d6a28681-e0e2-4c01-9c32-40cbe3f433aa" bg-color="#FFFFFF" hdr-color="#D2D2D2" position-x="342" position-y="350" size-x="0" size-x2="96" size-y="0" size-y2="73"/>
+    <entity uuid="f499f86b-aa3d-4ec4-887e-9c3a811e4687" bg-color="#FFFFFF" hdr-color="#D2D2D2" position-x="20" position-y="195" size-x="0" size-x2="116" size-y="0" size-y2="115"/>
+    <module uuid="5968eaec-4f9f-46cd-963e-be096952df54" bg-color="#E7F5FD" position-x="50" position-y="50" size-x="0" size-x2="468" size-y="0" size-y2="640"/>
+    <project uuid="5fc58da5-abaa-44c8-9098-f4bd7d130098" size-x="0" size-x2="568" size-y="0" size-y2="740"/>
+  </visual-data>
+</skipper>

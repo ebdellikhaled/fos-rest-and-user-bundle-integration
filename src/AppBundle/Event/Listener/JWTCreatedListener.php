@@ -35,6 +35,13 @@ class JWTCreatedListener
         // add new data
         $payload['userId'] = $user->getId();
         $payload['username'] = $user->getUsername();
+        $payload['firstname'] = $user->getFirstname();
+        $payload['lastname'] = $user->getLastname();
+        $payload['department'] = $user->getDepartment();
+        $payload['phone'] = $user->getPhone();
+        $payload['email'] = $user->getEmail();
+        $payload['roles'] = $user->getRoles();
+        $payload['role'] = $user->getRole();
 
         $event->setData($payload);
     }
