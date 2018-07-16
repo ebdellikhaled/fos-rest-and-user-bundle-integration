@@ -1,5 +1,5 @@
-#Educate Me Esprit
-## FOS User Bundle with FOS REST Bundle integration
+# Esprit Educate Me
+##### FOS User Bundle with FOS REST Bundle integration
 
 Full course available at : https://codereviewvideos.com/course/fosuser-fosrest-lexikjwt-user-login-registration-api
 
